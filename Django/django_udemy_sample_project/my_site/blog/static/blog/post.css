@@ -1,0 +1,12 @@
+.post,
+.post a {
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+
+.post img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}

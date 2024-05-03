@@ -1,0 +1,25 @@
+{% extends "reviews/base.html" %}
+
+{% block title %}
+Your Review
+{% endblock title %}
+
+{% block content %}
+    {% if has_error %}
+        <p>This data is invalid, please fill the form again!</p>
+    {% endif %}
+    <form method="post"  action="/">
+        {% csrf_token %}
+        <!-- <label for="username">Your name</label>
+        <input id="username" name="username" type="text"> -->
+        <!-- {{ form }} -->
+        {% for field in form %}
+            <div class="form-control {% if field.errors %} errors {% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button>Send</button>
+    </form>
+{% endblock content %}
