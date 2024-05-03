@@ -6,3 +6,5 @@ python manage.py runserver
 python3 manage.py startapp challenges
 một page có thể bao gồm nhiều app, với mỗi app đảm nhận một chức năng chính của page
 
+C:\Users\ADMIN\AppData\Roaming\Python\Python39\Scripts
+
