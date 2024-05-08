@@ -40,6 +40,7 @@ class motor_types(models.Model):
 class brands(models.Model):
     brand_id = models.AutoField(primary_key=True)
     brand_name = models.CharField(max_length=50, unique=True, null=False, verbose_name='Tên thương hiệu')
+    brand_image = models.ImageField(upload_to='brand_images', null=True)
 
     def __str__(self) -> str:
         return f"{self.brand_name}"
@@ -56,6 +57,7 @@ class motorbikes(models.Model):
     type = models.ForeignKey(motor_types, on_delete=models.CASCADE, null=True, verbose_name='Kiểu xe')
     brand = models.ForeignKey(brands, on_delete=models.CASCADE, null=True, verbose_name='Thương hiệu')
     image = models.ImageField(upload_to='default_images', null=True)
+    banner_image = models.ImageField(upload_to='banner_images', null=True)
 
     def __str__(self) -> str:
         return f"{self.model}"
@@ -78,8 +80,11 @@ class motorbike_attributes(models.Model):
         default=Attribute_Type.COLOR,
         verbose_name='Kiểu phân loại')
 
-    color_1 = models.CharField(max_length=10, blank=True)
-    color_2 = models.CharField(max_length=10, blank=True)
+    color_1 = models.CharField(max_length=10, blank=True, verbose_name='Màu sắc 1 - màu chính')
+    color_2 = models.CharField(max_length=10, blank=True, verbose_name='Màu sắc 2 - màu phụ 1')
+    color_3 = models.CharField(max_length=10, blank=True, verbose_name='Màu sắc 3 - màu phụ 2')
+
+
 
     value = models.CharField(max_length=50, null=False, verbose_name='Giá trị')
 
@@ -100,12 +105,19 @@ class motorbike_skus(models.Model):
             MinValueValidator(1984),
             MaxValueValidator(datetime.today().year + 1)
         ],
-        verbose_name='Năm sản xuất'
+        verbose_name='Năm sản xuất',
+        default=2024,
     )
     price = models.DecimalField(max_digits=9, decimal_places=0, verbose_name='Giá')
     # image field
-    color = models.ForeignKey(motorbike_attributes, related_name='color', on_delete=models.CASCADE, null=True, verbose_name='Phiên bản màu')
-    option = models.ForeignKey(motorbike_attributes, related_name='option', on_delete=models.CASCADE, null=True, verbose_name='Cấu hình')
+    color = models.ForeignKey(motorbike_attributes, related_name='color',
+                              on_delete=models.CASCADE, null=True,
+                              limit_choices_to= {'attribute_type': 'color'},
+                              verbose_name='Phiên bản màu')
+    option = models.ForeignKey(motorbike_attributes, related_name='option',
+                               on_delete=models.CASCADE, null=True,
+                               limit_choices_to={'attribute_type': 'option'},
+                               verbose_name='Cấu hình')
     sku_image = models.ImageField(upload_to='sku_images', null=True)
 
     def __str__(self) -> str:
